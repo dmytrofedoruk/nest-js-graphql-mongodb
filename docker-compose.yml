@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:5.0
+    container_name: nest-app-db-products-container
+    env_file: .env
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    command: mongod --port ${DB_PORT}
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - nest-app-network
+  app:
+    image: nest-products-api
+    env_file: .env
+    depends_on:
+      - mongodb
+    build: .
+    restart: always
+    container_name: nest-mongo-api-container
+    environment:
+        DB_HOST: nest-app-db-products-container
+    links:
+      - "mongodb:database"
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - nest-app-network
+volumes:
+  mongo_data:
+networks:
+  nest-app-network:
+    driver: bridge

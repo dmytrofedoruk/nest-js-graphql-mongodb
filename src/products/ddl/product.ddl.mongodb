@@ -1,0 +1,34 @@
+use('products_db')
+
+db.createCollection('products', {
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: ['name', 'price', 'quantity'],
+            properties: {
+                name: {
+                    bsonType: 'string',
+                    pattern:'[a-zA-Z0-9 ., ?!&$%@#*(){}]{5,}'
+                },
+                description: {
+                    bsonType: 'string',
+                    pattern: '[a-zA-Z0-9 ., ?!&$%@#*(){}]{8,}' 
+                },
+                image:{
+                    bsonType: 'string',
+                    pattern: '(https?:\/\/.*\.(?:png|jpg|jpeg))'
+                },
+                price: {
+                    bsonType: 'number',
+                    minimum: 180,
+                    maximum: 85900
+                },
+                quantity: {
+                    bsonType: 'number',
+                    minimum: 0,
+                    maximum: 5500
+                },
+            }
+        }
+    }
+})

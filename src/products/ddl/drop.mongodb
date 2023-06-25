@@ -1,0 +1,3 @@
+use("products_db")
+
+db.products.drop()
