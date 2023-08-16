@@ -1,0 +1,58 @@
+namespace: products-crud-api
+products-crud-api:
+  defines: runnable
+  metadata:
+    name: products-crud-api
+    description: A CRUD API for products written in Nest.js, using MongoDB as a database
+    icon: https://emojiapi.dev/api/v1/robot.svg
+  containers:
+    products-crud-api:
+      build: .
+  services:
+    app:
+      container: products-crud-api
+      port: <- $port
+      host-port: <- $port
+      publish: false
+      protocol: TCP
+      description: Port at which the application exposes its HTTP interface
+  connections:
+    mongodb:
+      target: mongodb/mongodb
+      service: mongodb
+  variables:
+    port:
+      env: PORT
+      type: int
+      description: Port at which the application exposes its HTTP interface
+      value: '3003'
+    db-url:
+      env: DB_URL
+      type: string
+      description: URL of the MongoDB database
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-host:
+      env: DB_HOST
+      type: string
+      description: Hostname of the MongoDB database
+      value: <- connection-hostname("mongodb")
+    db-username:
+      env: DB_USERNAME
+      type: string
+      description: Username for accessing the MongoDB database
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-password:
+      env: DB_PASSWORD
+      type: string
+      description: Password for accessing the MongoDB database
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-port:
+      env: DB_PORT
+      type: int
+      description: Port at which the MongoDB database is listening
+      value: <- connection-port("mongodb")
+    db-name:
+      env: DB_NAME
+      type: string
+      description: Name of the MongoDB database to use
+      value: YOUR_DB_NAME
