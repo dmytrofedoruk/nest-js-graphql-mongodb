@@ -1,0 +1,58 @@
+namespace: nest-js-graphql-mongodb
+nest-js-graphql-mongodb:
+  defines: runnable
+  metadata:
+    name: nest-js-graphql-mongodb
+    description: A GraphQL API built with NestJS and MongoDB.
+    icon: https://emojiapi.dev/api/v1/globe_with_meridians.svg
+  containers:
+    nest-js-graphql-mongodb:
+      build: .
+  services:
+    application-main-port:
+      container: nest-js-graphql-mongodb
+      port: <- $port
+      host-port: <- $port
+      publish: false
+      protocol: TCP
+      description: Main port for the application
+  connections:
+    mongodb:
+      target: aerospike/aerospike
+      service: base-svc
+  variables:
+    port:
+      env: PORT
+      type: string
+      description: Port for the application to run on
+      value: '3003'
+    db-url:
+      env: DB_URL
+      type: string
+      description: URL for the MongoDB connection
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-host:
+      env: DB_HOST
+      type: string
+      description: Host for the MongoDB Database
+      value: <- connection-hostname("mongodb")
+    db-username:
+      env: DB_USERNAME
+      type: string
+      description: Username for the MongoDB Database
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-password:
+      env: DB_PASSWORD
+      type: string
+      description: Password for the MongoDB Database
+      value: '!!!SETME-USE-SECRETS!!!'
+    db-port:
+      env: DB_PORT
+      type: string
+      description: Port of the MongoDB Database
+      value: <- connection-port("mongodb")
+    db-name:
+      env: DB_NAME
+      type: string
+      description: Name of the MongoDB Database
+      value: YOUR_DB_NAME
